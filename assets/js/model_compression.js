@@ -15,6 +15,16 @@
     { bits: 8, label: "INT8", levels: 10, speed: 3, qualityCost: 1.4 },
     { bits: 4, label: "INT4", levels: 4, speed: 3.6, qualityCost: 5.5 }
   ];
+  const WEIGHT_COLORS = [
+    "#eef2ff",
+    "#dbe3ff",
+    "#c7d2fe",
+    "#a5b4fc",
+    "#818cf8",
+    "#6366f1",
+    "#4338ca",
+    "#1e1b4b"
+  ];
 
   function seededRandom(seed) {
     let value = seed;
@@ -105,7 +115,9 @@
           if (state.healed && state.sparsity > 0) value += (1 - value) * 0.3;
           value = Math.round(value * (quantization.levels - 1)) / (quantization.levels - 1);
           cell.classList.add("mc-weight-cell-live");
-          cell.dataset.level = String(Math.min(7, Math.max(0, Math.round(value * 7))));
+          const level = Math.min(7, Math.max(0, Math.round(value * 7)));
+          cell.dataset.level = String(level);
+          cell.style.backgroundColor = WEIGHT_COLORS[level];
         }
         fragment.appendChild(cell);
       });

@@ -1,0 +1,258 @@
+<div class="mc-figure" data-compression-figure>
+  <header class="mc-figure-header">
+    <div class="mc-eyebrow">Interactive figure</div>
+    <h2>Change one setting at a time</h2>
+    <p>
+      One 7-billion-parameter model, drawn as 256 weights. Use the controls and watch
+      parameter count, memory, latency, and retained quality move together.
+    </p>
+  </header>
+
+  <section class="mc-panel mc-panel-weights" aria-labelledby="mc-weights-title">
+    <div class="mc-panel-heading">
+      <h3 id="mc-weights-title"><span>a</span> The weights</h3>
+      <button class="mc-reset" type="button" data-control="reset">Reset</button>
+    </div>
+
+    <div class="mc-model-row">
+      <div class="mc-weight-grid" data-weight-grid aria-label="A grid representing model weights"></div>
+      <div class="mc-adapter" data-adapter aria-label="Task adapter">
+        <div class="mc-adapter-cells" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <small>task<br>adapter</small>
+      </div>
+    </div>
+
+    <div class="mc-legend" aria-label="Weight grid legend">
+      <span><i class="mc-legend-live" aria-hidden="true"></i> weight, darker = larger</span>
+      <span><i class="mc-legend-pruned" aria-hidden="true"></i> pruned to zero</span>
+      <span><i class="mc-legend-gone" aria-hidden="true"></i> distilled away</span>
+    </div>
+  </section>
+
+  <section class="mc-panel mc-panel-readouts" aria-labelledby="mc-readouts-title">
+    <div class="mc-panel-heading">
+      <h3 id="mc-readouts-title"><span>b</span> What it costs</h3>
+    </div>
+
+    <div class="mc-stats">
+      <div class="mc-stat">
+        <div class="mc-stat-label">Parameters</div>
+        <div class="mc-stat-value"><span data-stat="params">7.00</span><small>B</small></div>
+      </div>
+      <div class="mc-stat">
+        <div class="mc-stat-label">Weight memory</div>
+        <div class="mc-stat-value"><span data-stat="memory">28.0</span><small>GB</small></div>
+        <div class="mc-stat-note" data-note="memory">FP32 · 32 bits each</div>
+      </div>
+      <div class="mc-stat mc-stat-accent">
+        <div class="mc-stat-label">Latency / token</div>
+        <div class="mc-stat-value"><span data-stat="latency">28.3</span><small>ms</small></div>
+        <div class="mc-stat-note" data-note="latency">35 tokens per second</div>
+      </div>
+      <div class="mc-stat" data-quality-tone="high">
+        <div class="mc-stat-label">Quality kept</div>
+        <div class="mc-stat-value"><span data-stat="quality">100</span><small>%</small></div>
+        <div class="mc-stat-note" data-note="quality">task fit 41%</div>
+      </div>
+    </div>
+
+    <div class="mc-waterfall">
+      <div class="mc-section-label">Where the milliseconds go</div>
+      <div class="mc-waterfall-track" aria-label="Latency breakdown">
+        <span class="mc-bar-memory" data-bar="memory"></span>
+        <span class="mc-bar-compute" data-bar="compute"></span>
+        <span class="mc-bar-overhead" data-bar="overhead"></span>
+      </div>
+      <div class="mc-waterfall-legend">
+        <span><i class="mc-swatch-memory" aria-hidden="true"></i> reading weights <b data-time="memory">17.5</b> ms</span>
+        <span><i class="mc-swatch-compute" aria-hidden="true"></i> arithmetic <b data-time="compute">6.3</b> ms</span>
+        <span><i class="mc-swatch-overhead" aria-hidden="true"></i> launch overhead <b data-time="overhead">4.5</b> ms</span>
+      </div>
+    </div>
+
+    <div class="mc-token-stream">
+      <div class="mc-section-label">Decoding, one token at a time</div>
+      <div class="mc-token-output" data-token-output></div>
+      <div class="mc-token-note" data-token-note></div>
+    </div>
+  </section>
+
+  <section class="mc-panel mc-panel-pipeline" aria-labelledby="mc-pipeline-title">
+    <div class="mc-panel-heading mc-panel-heading-stacked">
+      <h3 id="mc-pipeline-title"><span>c</span> The compression pipeline</h3>
+      <p>Open a step to see what it changes.</p>
+    </div>
+
+    <details class="mc-step" open>
+      <summary>
+        <span class="mc-step-number">1</span>
+        <span class="mc-step-name">Distillation</span>
+        <span class="mc-step-status" data-status="distilled">teacher 7B</span>
+      </summary>
+      <div class="mc-step-body">
+        <div class="mc-segmented" role="group" aria-label="Choose teacher or student model">
+          <button type="button" data-control="toggle" data-action="distilled" data-value="false">Teacher</button>
+          <button type="button" data-control="toggle" data-action="distilled" data-value="true">Student</button>
+        </div>
+        <p>
+          Train a small <strong>student</strong> model to copy a large <strong>teacher</strong>.
+          The student learns from the teacher’s probability distribution, not only the correct answer.
+          You pay for a training run and get a permanently smaller model.
+        </p>
+      </div>
+    </details>
+
+    <details class="mc-step">
+      <summary>
+        <span class="mc-step-number">2</span>
+        <span class="mc-step-name">Pruning</span>
+        <span class="mc-step-status" data-status="sparsity">0% removed</span>
+      </summary>
+      <div class="mc-step-body">
+        <label class="mc-range-label" for="mc-sparsity">
+          Remove the smallest weights <output data-sparsity-output>0%</output>
+        </label>
+        <input id="mc-sparsity" data-control="sparsity" type="range" min="0" max="0.7" step="0.1" value="0">
+        <p class="mc-warning" data-sparse-warning hidden>
+          Zeros were removed, but latency is unchanged. A dense kernel still multiplies by zero at full price—turn on step 6 to skip them.
+        </p>
+        <p>
+          Delete the weights that matter least—here, the smallest ones. Unstructured pruning leaves
+          holes scattered through the matrix, so it needs a sparsity-aware runtime to become faster.
+          Structured pruning removes whole channels or heads and is easier for ordinary kernels to exploit.
+        </p>
+      </div>
+    </details>
+
+    <details class="mc-step">
+      <summary>
+        <span class="mc-step-number">3</span>
+        <span class="mc-step-name">Healing</span>
+        <span class="mc-step-status" data-status="healed">raw</span>
+      </summary>
+      <div class="mc-step-body">
+        <div class="mc-segmented" role="group" aria-label="Choose whether to heal the pruned model">
+          <button type="button" data-control="toggle" data-action="healed" data-value="false">Skip</button>
+          <button type="button" data-control="toggle" data-action="healed" data-value="true">Heal</button>
+        </div>
+        <p>
+          A short retraining pass lets surviving weights cover some of what the deleted weights were doing.
+          It usually uses a small calibration set and far fewer steps than the original training run.
+        </p>
+      </div>
+    </details>
+
+    <details class="mc-step">
+      <summary>
+        <span class="mc-step-number">4</span>
+        <span class="mc-step-name">Fine-tuning</span>
+        <span class="mc-step-status" data-status="tuned">general</span>
+      </summary>
+      <div class="mc-step-body">
+        <div class="mc-segmented" role="group" aria-label="Choose whether to fine-tune the model">
+          <button type="button" data-control="toggle" data-action="tuned" data-value="false">Off</button>
+          <button type="button" data-control="toggle" data-action="tuned" data-value="true">Fine-tune</button>
+        </div>
+        <p>
+          Fine-tuning specializes a general model for one task. A small adapter can improve task fit without
+          changing every base weight. It does not automatically make the base model smaller, but it can recover
+          useful performance after compression.
+        </p>
+      </div>
+    </details>
+
+    <details class="mc-step">
+      <summary>
+        <span class="mc-step-number">5</span>
+        <span class="mc-step-name">Quantization</span>
+        <span class="mc-step-status" data-status="bits">FP32</span>
+      </summary>
+      <div class="mc-step-body">
+        <div class="mc-segmented mc-segmented-four" role="group" aria-label="Choose model precision">
+          <button type="button" data-control="bits" data-bit="0">FP32</button>
+          <button type="button" data-control="bits" data-bit="1">FP16</button>
+          <button type="button" data-control="bits" data-bit="2">INT8</button>
+          <button type="button" data-control="bits" data-bit="3">INT4</button>
+        </div>
+        <p>
+          Store each weight with fewer bits. Memory falls immediately, and supported hardware can move and
+          multiply low-precision values faster. Very low precision introduces rounding error, so calibration matters.
+        </p>
+      </div>
+    </details>
+
+    <details class="mc-step">
+      <summary>
+        <span class="mc-step-number">6</span>
+        <span class="mc-step-name">Sparse runtime</span>
+        <span class="mc-step-status" data-status="optimized">dense kernel</span>
+      </summary>
+      <div class="mc-step-body">
+        <div class="mc-segmented" role="group" aria-label="Choose dense or sparse-aware runtime">
+          <button type="button" data-control="toggle" data-action="optimized" data-value="false">Dense</button>
+          <button type="button" data-control="toggle" data-action="optimized" data-value="true">Sparse-aware</button>
+        </div>
+        <p>
+          A runtime with kernels that understand the pruning pattern can skip zero weights. Without that software
+          and hardware support, a sparse checkpoint may use less storage while running no faster.
+        </p>
+      </div>
+    </details>
+  </section>
+
+  <section class="mc-related" aria-labelledby="mc-related-title">
+    <div class="mc-panel-heading mc-panel-heading-stacked">
+      <h3 id="mc-related-title"><span>d</span> Three related techniques</h3>
+      <p>Often discussed in the same conversation, but they solve different bottlenecks.</p>
+    </div>
+
+    <div class="mc-related-grid">
+      <details class="mc-term">
+        <summary>
+          <span>7 · Adaptation</span>
+          <strong>LoRA &amp; adapters</strong>
+        </summary>
+        <div class="mc-term-art mc-term-art-adapter" aria-hidden="true"><i></i><b></b></div>
+        <p>
+          Freeze the base model and train a small low-rank update. This makes task-specific training and storage
+          cheaper, but the original base model still has to be loaded for inference.
+        </p>
+      </details>
+
+      <details class="mc-term">
+        <summary>
+          <span>8 · Training</span>
+          <strong>Quantization-aware training</strong>
+        </summary>
+        <div class="mc-term-art mc-term-art-quant" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <p>
+          Simulate low-precision rounding during training so the model learns weights that survive it. This can
+          preserve more quality than quantizing a finished model, at the cost of additional training.
+        </p>
+      </details>
+
+      <details class="mc-term">
+        <summary>
+          <span>9 · Decoding</span>
+          <strong>Speculative decoding</strong>
+        </summary>
+        <div class="mc-term-art mc-term-art-speculative" aria-hidden="true"><i></i><i></i><b></b></div>
+        <p>
+          Let a small draft model propose several tokens, then verify them with the large model in one pass.
+          The large model is not compressed, but accepted drafts can reduce end-to-end generation time.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <footer class="mc-figure-note">
+    Illustrative estimates, not a hardware benchmark. Values assume a dense 7B baseline and are intended to show the direction of each trade-off.
+  </footer>
+
+  <noscript><p class="mc-noscript">Enable JavaScript to use the interactive controls.</p></noscript>
+</div>
+
+<script defer src="{{ '/assets/js/model_compression.js' | relative_url | bust_file_cache }}"></script>

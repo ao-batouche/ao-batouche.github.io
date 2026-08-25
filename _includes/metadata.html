@@ -15,7 +15,11 @@
 {%- assign page_description = page.description | default: site.description | strip -%}
 {%- assign page_keywords = page.keywords | default: site.keywords | strip -%}
 {%- assign canonical_url = page.url | replace: 'index.html', '' | absolute_url -%}
-{%- assign social_image = page.og_image | default: site.og_image -%}
+{%- if page.collection == 'posts' -%}
+  {%- assign social_image = page.og_image -%}
+{%- else -%}
+  {%- assign social_image = page.og_image | default: site.og_image -%}
+{%- endif -%}
 {%- assign social_image_alt = page.og_image_alt | default: page.image_alt | default: site.og_image_alt | strip -%}
 {%- unless social_image == blank or social_image contains '://' -%}
   {%- assign social_image = social_image | absolute_url -%}
@@ -200,10 +204,15 @@
 {%- if site.serve_og_meta %}
 <!-- OpenGraph -->
 <meta property="og:site_name" content="{{ site_name }}" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="{% if page.collection == 'posts' %}article{% else %}website{% endif %}" />
 <meta property="og:title" content="{{ page_title }}" />
 <meta property="og:url" content="{{ canonical_url }}" />
 <meta property="og:description" content="{{ page_description }}" />
+{% if page.collection == 'posts' %}
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />
+{% if page.author %}<meta property="article:author" content="{{ page.author }}" />{% endif %}
+{% for tag in page.tags %}<meta property="article:tag" content="{{ tag }}" />{% endfor %}
+{% endif %}
 {% if social_image and social_image != blank %}
 <meta property="og:image" content="{{ social_image }}" />
   {% if social_image_alt != blank %}

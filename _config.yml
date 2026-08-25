@@ -212,6 +212,13 @@ plugins:
 # Sitemap settings
 defaults:
   - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      author: Oussama Batouche
+      permalink: /blog/:title/
+  - scope:
       path: "assets"
     values:
       sitemap: false

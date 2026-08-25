@@ -3,6 +3,7 @@ layout: post
 date: 2026-06-17
 inline: false
 title: "VibeCon 2026 By Replit, New York"
+description: Highlights from Replit's first VibeCon in New York, including talks, workshops, and conversations about AI-powered software development.
 related_posts: false
 ---
 

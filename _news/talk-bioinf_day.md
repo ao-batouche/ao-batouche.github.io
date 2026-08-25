@@ -3,6 +3,7 @@ layout: post
 date: 2026-05-29
 inline: false
 title: "Talk: Multi-model Machine learning models from cross-institutional cohorts"
+description: A Bioinformatics Day 2026 talk on multimodal machine-learning models trained on cross-institutional cohorts to predict adverse prostate cancer pathology.
 related_posts: false
 ---
 

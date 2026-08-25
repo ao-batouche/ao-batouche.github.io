@@ -3,6 +3,7 @@ layout: post
 date: 2026-02-01
 inline: false
 title: "MenaML 2026 @ KAUST, Saudi Arabia"
+description: Reflections from the MenaML Winter School 2026 at KAUST, where 300 participants explored machine learning and AI with leading researchers.
 related_posts: false
 ---
 

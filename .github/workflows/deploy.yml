@@ -35,15 +35,17 @@ jobs:
         value: ${{ github.repository }}
     - name: Install and Build 🔧
       run: |
+        sudo apt-get update
+        sudo apt-get install --yes imagemagick
         pip3 install --upgrade jupyter
         npm install -g mermaid.cli
         npm install -g purgecss
         export JEKYLL_ENV=production
         bundle exec jekyll build --lsi
         purgecss -c purgecss.config.js
+        bundle exec ruby bin/audit-indexability _site
     - name: Deploy 🚀
       if: github.event_name != 'pull_request'
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: _site
-

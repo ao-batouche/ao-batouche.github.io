@@ -2,6 +2,8 @@
 layout: post
 date: 2022-01-01
 inline: true
+sitemap: false
+robots: noindex,follow
 related_posts: false
 ---
 

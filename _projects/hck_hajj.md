@@ -5,6 +5,7 @@ description: The largest hackathon in history, with more than 3,000 participants
 img: assets/img/projects/hck_hajj_18/min_hajj_hack.png
 redirect: https://hajjhackathon.devpost.com/
 sitemap: false
+robots: noindex,follow
 importance: 4
 category: Hackathons
 ---

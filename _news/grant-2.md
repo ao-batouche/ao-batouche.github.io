@@ -2,6 +2,8 @@
 layout: post
 date: 2024-03-25
 inline: true
+sitemap: false
+robots: noindex,follow
 related_posts: false
 ---
 

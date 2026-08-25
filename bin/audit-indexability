@@ -1,0 +1,171 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'nokogiri'
+require 'pathname'
+require 'rexml/document'
+require 'uri'
+
+site_dir = Pathname.new(ARGV.fetch(0, '_site')).expand_path
+sitemap_path = site_dir.join('sitemap.xml')
+skip_asset_check = ENV['SKIP_ASSET_CHECK'] == '1'
+errors = []
+
+unless sitemap_path.file?
+  warn "Missing sitemap: #{sitemap_path}"
+  exit 1
+end
+
+sitemap_urls = []
+sitemap = REXML::Document.new(sitemap_path.read)
+REXML::XPath.each(sitemap, '//*[local-name()="loc"]') do |node|
+  sitemap_urls << node.text.to_s.strip
+end
+
+if sitemap_urls.empty?
+  warn "Sitemap contains no URLs: #{sitemap_path}"
+  exit 1
+end
+
+site_uri = URI(sitemap_urls.first)
+site_origin = "#{site_uri.scheme}://#{site_uri.host}"
+html_files = Dir.glob(site_dir.join('**', '*.html')).map { |path| Pathname.new(path) }
+html_files.reject! { |path| path.to_s.include?('/assets/') }
+pages = []
+inbound_links = Hash.new(0)
+
+route_for = lambda do |path|
+  relative = path.relative_path_from(site_dir).to_s
+  route = "/#{relative}"
+  route.end_with?('/index.html') ? route.delete_suffix('index.html') : route
+end
+
+normalize_internal_path = lambda do |value, current_route|
+  raw = value.to_s.strip
+  return if raw.empty? || raw.start_with?('#', 'mailto:', 'tel:', 'javascript:', 'data:')
+
+  uri = URI(raw)
+  if uri.host
+    return unless "#{uri.scheme}://#{uri.host}" == site_origin
+    path = uri.path
+  else
+    return if raw.start_with?('//')
+    path = uri.path
+  end
+
+  path = '/' if path.to_s.empty?
+  unless path.start_with?('/')
+    base = current_route.end_with?('/') ? current_route : File.dirname(current_route) + '/'
+    path = URI.join(site_origin + base, path).path
+  end
+  path = path.delete_suffix('index.html')
+  path
+rescue URI::InvalidURIError
+  nil
+end
+
+html_files.sort.each do |path|
+  route = route_for.call(path)
+  document = Nokogiri::HTML(path.read)
+  document.css('a[href]').each do |link|
+    target = normalize_internal_path.call(link['href'], route)
+    inbound_links[target] += 1 if target
+  end
+
+  robots = document.at_css('meta[name="robots"]')&.[]('content').to_s.downcase
+  canonical = document.at_css('link[rel="canonical"]')&.[]('href').to_s
+  refresh = document.at_css('meta[http-equiv="refresh"]')&.[]('content').to_s
+  title = document.at_css('title')&.text.to_s.strip
+  description = document.at_css('meta[name="description"]')&.[]('content').to_s.strip
+  content = document.at_css('main, article, .container.mt-5') || document.at_css('body')
+  words = content&.text.to_s.gsub(/\s+/, ' ').strip.split.length
+
+  document.css('script[type="application/ld+json"]').each do |script|
+    JSON.parse(script.text)
+  rescue JSON::ParserError => error
+    errors << "#{route}: invalid JSON-LD (#{error.message})"
+  end
+
+  pages << {
+    route: route,
+    document: document,
+    robots: robots,
+    canonical: canonical,
+    refresh: refresh,
+    title: title,
+    description: description,
+    words: words,
+    in_sitemap: sitemap_urls.include?(site_origin + route)
+  }
+end
+
+sitemap_urls.group_by(&:itself).each do |url, matches|
+  errors << "Duplicate sitemap URL: #{url}" if matches.length > 1
+end
+
+pages.each do |page|
+  indexable = !page[:robots].include?('noindex') && page[:refresh].empty?
+
+  if indexable
+    expected_canonical = site_origin + page[:route]
+    errors << "#{page[:route]}: missing from sitemap" unless page[:in_sitemap]
+    errors << "#{page[:route]}: canonical is #{page[:canonical].inspect}, expected #{expected_canonical}" unless page[:canonical] == expected_canonical
+    errors << "#{page[:route]}: missing title" if page[:title].empty?
+    errors << "#{page[:route]}: missing meta description" if page[:description].empty?
+    errors << "#{page[:route]}: expected exactly one h1" unless page[:document].css('h1').length == 1
+    errors << "#{page[:route]}: too little indexable text (#{page[:words]} words)" if page[:words] < 20
+    errors << "#{page[:route]}: no internal link points to this page" if page[:route] != '/' && inbound_links[page[:route]].zero?
+  else
+    errors << "#{page[:route]}: excluded page must not appear in sitemap" if page[:in_sitemap]
+  end
+end
+
+sitemap_urls.each do |url|
+  uri = URI(url)
+  unless "#{uri.scheme}://#{uri.host}" == site_origin
+    errors << "Sitemap URL uses a different origin: #{url}"
+    next
+  end
+  errors << "Sitemap URL has no generated HTML page: #{url}" unless pages.any? { |page| page[:route] == uri.path }
+end
+
+pages.select { |page| !page[:robots].include?('noindex') && page[:refresh].empty? }
+     .group_by { |page| page[:canonical] }
+     .each do |canonical, matches|
+  errors << "Duplicate canonical #{canonical}: #{matches.map { |page| page[:route] }.join(', ')}" if matches.length > 1
+end
+
+unless skip_asset_check
+  pages.each do |page|
+    references = []
+    page[:document].css('[src]').each { |node| references << node['src'] }
+    page[:document].css('[poster]').each { |node| references << node['poster'] }
+    page[:document].css('link[href]').each { |node| references << node['href'] }
+    page[:document].css('[srcset]').each do |node|
+      node['srcset'].to_s.split(',').each do |candidate|
+        references << candidate.strip.split(/\s+/, 2).first
+      end
+    end
+
+    references.compact.uniq.each do |reference|
+      target = normalize_internal_path.call(reference, page[:route])
+      next unless target
+
+      disk_path = site_dir.join(target.delete_prefix('/'))
+      next if disk_path.file? || disk_path.directory?
+
+      errors << "#{page[:route]}: missing local resource #{target}"
+    end
+  end
+end
+
+if errors.empty?
+  indexable_count = pages.count { |page| !page[:robots].include?('noindex') && page[:refresh].empty? }
+  excluded_count = pages.length - indexable_count
+  puts "Indexability audit passed: #{pages.length} HTML pages, #{indexable_count} indexable, #{excluded_count} intentionally excluded, #{sitemap_urls.length} sitemap URLs."
+  exit 0
+end
+
+warn "Indexability audit failed with #{errors.length} issue#{errors.length == 1 ? '' : 's'}:"
+errors.uniq.sort.each { |error| warn "- #{error}" }
+exit 1

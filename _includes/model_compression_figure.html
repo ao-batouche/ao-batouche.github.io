@@ -26,7 +26,7 @@
     </div>
 
     <div class="mc-legend" aria-label="Weight grid legend">
-      <span><i class="mc-legend-live" aria-hidden="true"></i> weight, darker = larger</span>
+      <span><i class="mc-legend-live" aria-hidden="true"></i> weight, light → dark = small → large</span>
       <span><i class="mc-legend-pruned" aria-hidden="true"></i> pruned to zero</span>
       <span><i class="mc-legend-gone" aria-hidden="true"></i> distilled away</span>
     </div>
@@ -157,9 +157,10 @@
           <button type="button" data-control="toggle" data-action="tuned" data-value="true">Fine-tune</button>
         </div>
         <p>
-          Fine-tuning specializes a general model for one task. A small adapter can improve task fit without
-          changing every base weight. It does not automatically make the base model smaller, but it can recover
-          useful performance after compression.
+          Keep training a finished model on your own data so it fits your task, tone, or format.
+          A full fine-tune rewrites every weight. <strong>LoRA</strong> and other adapters freeze the base model
+          and train a small extra matrix beside it—the teal strip. That is why the parameter count
+          here does not move: you added roughly 0.5% more weights, and you can swap them per task.
         </p>
       </div>
     </details>
@@ -167,7 +168,7 @@
     <details class="mc-step">
       <summary>
         <span class="mc-step-number">5</span>
-        <span class="mc-step-name">Quantization</span>
+        <span class="mc-step-name">Quantisation</span>
         <span class="mc-step-status" data-status="bits">FP32</span>
       </summary>
       <div class="mc-step-body">
@@ -178,8 +179,12 @@
           <button type="button" data-control="bits" data-bit="3">INT4</button>
         </div>
         <p>
-          Store each weight with fewer bits. Memory falls immediately, and supported hardware can move and
-          multiply low-precision values faster. Very low precision introduces rounding error, so calibration matters.
+          Store each weight in fewer bits, with a shared scale factor per group to map the small
+          integer range back onto real values. Memory falls in exact proportion—and since decoding
+          is limited by how fast weights can be read, latency follows. Look closely at the grid: the
+          shades collapse into visible bands, because there are only
+          <span data-quant-level-description>many</span> values left to round to.
+          Below 8 bits you usually need calibration data or quantisation-aware training.
         </p>
       </div>
     </details>
@@ -187,17 +192,20 @@
     <details class="mc-step">
       <summary>
         <span class="mc-step-number">6</span>
-        <span class="mc-step-name">Sparse runtime</span>
-        <span class="mc-step-status" data-status="optimized">dense kernel</span>
+        <span class="mc-step-name">Optimisation &amp; kernels</span>
+        <span class="mc-step-status" data-status="optimized">stock graph</span>
       </summary>
       <div class="mc-step-body">
-        <div class="mc-segmented" role="group" aria-label="Choose dense or sparse-aware runtime">
-          <button type="button" data-control="toggle" data-action="optimized" data-value="false">Dense</button>
-          <button type="button" data-control="toggle" data-action="optimized" data-value="true">Sparse-aware</button>
+        <div class="mc-segmented" role="group" aria-label="Choose stock or optimised execution">
+          <button type="button" data-control="toggle" data-action="optimized" data-value="false">Stock</button>
+          <button type="button" data-control="toggle" data-action="optimized" data-value="true">Optimise</button>
         </div>
         <p>
-          A runtime with kernels that understand the pruning pattern can skip zero weights. Without that software
-          and hardware support, a sparse checkpoint may use less storage while running no faster.
+          Everything that changes <em>how</em> the graph runs without changing <em>what</em> it computes:
+          fusing operators into one kernel, folding constants, changing memory layout, picking a
+          better kernel for this shape and this GPU, caching keys and values across steps. The maths is
+          identical and the answer is identical—only the clock moves. It is the one step on this
+          list that costs no quality at all, which is why it is done first in practice and last here.
         </p>
       </div>
     </details>
@@ -205,51 +213,91 @@
 
   <section class="mc-related" aria-labelledby="mc-related-title">
     <div class="mc-panel-heading mc-panel-heading-stacked">
-      <h3 id="mc-related-title"><span>d</span> Three related techniques</h3>
-      <p>Often discussed in the same conversation, but they solve different bottlenecks.</p>
+      <h3 id="mc-related-title"><span>d</span> What you were changing all along</h3>
+      <p>Open a term to connect the controls above to the system underneath.</p>
     </div>
 
     <div class="mc-related-grid">
-      <details class="mc-term">
-        <summary>
-          <span>7 · Adaptation</span>
-          <strong>LoRA &amp; adapters</strong>
-        </summary>
-        <div class="mc-term-art mc-term-art-adapter" aria-hidden="true"><i></i><b></b></div>
-        <p>
-          Freeze the base model and train a small low-rank update. This makes task-specific training and storage
-          cheaper, but the original base model still has to be loaded for inference.
-        </p>
-      </details>
+      <article class="mc-term">
+        <header class="mc-term-heading">
+          <span>The act itself</span>
+          <strong>Model inference</strong>
+        </header>
+        <div class="mc-term-art mc-term-art-inference" aria-hidden="true">
+          <div class="mc-inference-flow">
+            <b>prefill</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="mc-art-caption"><span>whole prompt, parallel</span><span>one token each, in order</span></div>
+        </div>
+        <details class="mc-term-details">
+          <summary>Read explanation</summary>
+          <p>
+            Running the trained model forward to produce output. For a language model it splits in two:
+            a <strong>prefill</strong> pass that reads the whole prompt at once and saturates the GPU’s maths units,
+            then one <strong>decode</strong> step per output token, each of which must read every weight again to
+            produce a single token. Decode is where the model spends its life, and it is starved for
+            memory bandwidth rather than arithmetic—which is exactly why shrinking the weights helps.
+          </p>
+        </details>
+      </article>
 
-      <details class="mc-term">
-        <summary>
-          <span>8 · Training</span>
-          <strong>Quantization-aware training</strong>
-        </summary>
-        <div class="mc-term-art mc-term-art-quant" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <p>
-          Simulate low-precision rounding during training so the model learns weights that survive it. This can
-          preserve more quality than quantizing a finished model, at the cost of additional training.
-        </p>
-      </details>
+      <article class="mc-term">
+        <header class="mc-term-heading">
+          <span>The code that runs</span>
+          <strong>Kernel</strong>
+        </header>
+        <div class="mc-term-art mc-term-art-kernel" aria-hidden="true">
+          <div class="mc-kernel-flow">
+            <b>HBM</b><span>→</span>
+            <div><i></i><i></i><i></i></div>
+          </div>
+          <small>three ops fused into one kernel</small>
+        </div>
+        <details class="mc-term-details">
+          <summary>Read explanation</summary>
+          <p>
+            A kernel is the actual program the GPU runs for one operation—a matrix multiply, a
+            softmax, an attention block. One piece of maths can have dozens of kernels, and they differ
+            enormously: the fast one keeps data in on-chip memory and does more work per trip to HBM.
+            <strong>Fusing</strong> several operations into a single kernel removes the launches and the
+            round-trips between them. FlashAttention is the famous example: same attention, one kernel,
+            no giant intermediate matrix written out and read back.
+          </p>
+        </details>
+      </article>
 
-      <details class="mc-term">
-        <summary>
-          <span>9 · Decoding</span>
-          <strong>Speculative decoding</strong>
-        </summary>
-        <div class="mc-term-art mc-term-art-speculative" aria-hidden="true"><i></i><i></i><b></b></div>
-        <p>
-          Let a small draft model propose several tokens, then verify them with the large model in one pass.
-          The large model is not compressed, but accepted drafts can reduce end-to-end generation time.
-        </p>
-      </details>
+      <article class="mc-term">
+        <header class="mc-term-heading">
+          <span>The number that hurts</span>
+          <strong>Inference latency</strong>
+        </header>
+        <div class="mc-term-art mc-term-art-latency" aria-hidden="true">
+          <div class="mc-latency-flow">
+            <b>TTFT</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="mc-art-caption"><span>time to first token</span><span>time per output token</span></div>
+        </div>
+        <details class="mc-term-details">
+          <summary>Read explanation</summary>
+          <p>
+            Wall-clock time to get a result, and it is really two numbers: <strong>time to first token</strong>,
+            set by prefill and how long you waited in a queue, and <strong>time per output token</strong>, set by
+            how fast weights can be streamed. Latency is not throughput—batching many users together
+            raises total tokens per second while making each individual wait longer. The bar in panel b
+            is the whole story: bytes moved, maths done, overhead paid. Every technique above attacks
+            one of those three.
+          </p>
+        </details>
+      </article>
     </div>
   </section>
 
   <footer class="mc-figure-note">
-    Illustrative estimates, not a hardware benchmark. Values assume a dense 7B baseline and are intended to show the direction of each trade-off.
+    Numbers are a simplified model of a 7B decoder on one accelerator at 1.6 TB/s, batch size 1.
+    Real quality loss depends entirely on the model, the data and the calibration set—the point
+    here is the direction each control pushes, not the digits.
   </footer>
 
   <noscript><p class="mc-noscript">Enable JavaScript to use the interactive controls.</p></noscript>

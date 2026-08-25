@@ -105,7 +105,7 @@
           if (state.healed && state.sparsity > 0) value += (1 - value) * 0.3;
           value = Math.round(value * (quantization.levels - 1)) / (quantization.levels - 1);
           cell.classList.add("mc-weight-cell-live");
-          cell.style.setProperty("--mc-weight", format(value, 3));
+          cell.dataset.level = String(Math.min(7, Math.max(0, Math.round(value * 7))));
         }
         fragment.appendChild(cell);
       });
@@ -190,7 +190,8 @@
       setText('[data-status="healed"]', state.healed ? "retrained" : "raw");
       setText('[data-status="tuned"]', state.tuned ? "task fit " + format(taskFit, 0) + "%" : "general");
       setText('[data-status="bits"]', quantization.label);
-      setText('[data-status="optimized"]', state.optimized ? "sparse-aware" : "dense kernel");
+      setText('[data-status="optimized"]', state.optimized ? "fused" : "stock graph");
+      setText("[data-quant-level-description]", quantization.levels > 20 ? "many" : String(quantization.levels));
       setText("[data-sparsity-output]", Math.round(state.sparsity * 100) + "%");
 
       const warning = one("[data-sparse-warning]");

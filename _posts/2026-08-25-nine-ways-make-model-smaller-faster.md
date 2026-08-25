@@ -1,6 +1,6 @@
 ---
 title: "Nine ways of saying ‘make the model smaller and faster’"
-description: "An interactive guide to model distillation, pruning, healing, fine-tuning, quantization, sparse runtimes, and three related inference techniques."
+description: "An interactive guide to model distillation, pruning, healing, fine-tuning, quantisation, kernel optimisation, and the inference concepts behind their trade-offs."
 author: Oussama Batouche
 tags:
   - model compression

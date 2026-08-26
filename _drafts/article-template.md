@@ -5,8 +5,12 @@ author: Oussama Batouche
 tags:
   - AI
   - research
-# Optional: add a landscape image for richer LinkedIn previews.
-# og_image: /assets/img/blog/your-image.jpg
+# Comments use GitHub Discussions. Set to false to disable them for one article.
+giscus_comments: true
+# Optional social thumbnail for LinkedIn and other link previews.
+# It is metadata only and is not displayed inside the article.
+# Use a 1200 × 630 PNG or JPG for reliable previews.
+# og_image: /assets/img/blog/your-image.png
 # og_image_alt: A concise description of the image
 ---
 

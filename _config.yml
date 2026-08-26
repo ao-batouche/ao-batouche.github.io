@@ -218,6 +218,8 @@ defaults:
       layout: post
       author: Oussama Batouche
       permalink: /blog/:title/
+      # Enable GitHub Discussions comments by default. A post can opt out with false.
+      giscus_comments: true
   - scope:
       path: "assets"
     values:

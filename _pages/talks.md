@@ -1,12 +1,10 @@
 ---
-layout: page
+layout: talks
 title: Talks
 permalink: /talks/
-description: Recent updates, talks, publications, awards, and research milestones from Oussama Batouche.
+description: Talks and research presentations by Oussama Batouche on machine learning, biomedical informatics, and prostate cancer research.
 nav: true
-nav_order: 5
+nav_order: 7
 ---
 
-<div>
-  {% include talks.html %}
-</div>
+{% include talks.html %}

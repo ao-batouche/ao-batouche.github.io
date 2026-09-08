@@ -2,9 +2,9 @@
     <header>
 
       <!-- Nav Bar -->
-      <nav id="navbar" class="navbar navbar-light navbar-expand-sm {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %}">
+      <nav id="navbar" aria-label="Main navigation" class="navbar navbar-light navbar-expand-lg {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %}">
         <div class="container">
-          {% if page.permalink != '/' -%}
+          {% unless site.enable_navbar_social and page.permalink == '/' -%}
           <a class="navbar-brand title font-weight-lighter" href="{{ site.baseurl }}/">
             {%- if site.title == "blank" -%}
               {%- if site.first_name -%}
@@ -20,12 +20,12 @@
               {{- site.title -}}
             {%- endif -%}
           </a>
-          {%- elsif site.enable_navbar_social -%}
+          {%- else -%}
           <!-- Social Icons -->
           <div class="navbar-brand social">
             {% include social.html %}
           </div>
-          {% endif %}
+          {% endunless %}
           <!-- Navbar Toggle -->
           <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -45,7 +45,7 @@
 
               <!-- About -->
               <li class="nav-item {% if page.permalink == '/' %}active{% endif %}">
-                <a class="nav-link" href="{{ '/' | relative_url }}">{{ about_title }}
+                <a class="nav-link" href="{{ '/' | relative_url }}"{% if page.permalink == '/' %} aria-current="page"{% endif %}>{{ about_title }}
                   {%- if page.permalink == '/' -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -82,7 +82,7 @@
               {%- else %}
               <li class="nav-item {% if page.url contains p.permalink %}active{% endif %}">
                 {%- assign url = p.url -%}
-                <a class="nav-link" href="{{ url | relative_url }}">{{ p.title }}
+                <a class="nav-link" href="{{ url | relative_url }}"{% if page.url contains p.url %} aria-current="page"{% endif %}>{{ p.title }}
                   {%- if page.url contains p.url -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -95,9 +95,9 @@
 
               <!-- Toogle theme mode -->
               <li class="toggle-container">
-                <button id="light-toggle" title="Change theme">
-                  <i class="fa-solid fa-moon"></i>
-                  <i class="fa-solid fa-sun"></i>
+                <button id="light-toggle" type="button" title="Change theme" aria-label="Switch to dark theme">
+                  <i class="fa-solid fa-moon" aria-hidden="true"></i>
+                  <i class="fa-solid fa-sun" aria-hidden="true"></i>
                 </button>
               </li>
               {%- endif %}
@@ -107,7 +107,7 @@
       </nav>
 {% if site.enable_progressbar %}
       <!-- Scrolling Progress Bar -->
-      <progress id="progress" value="0">
+      <progress id="progress" value="0" max="1" aria-label="Reading progress">
         <div class="progress-container">
           <span class="progress-bar"></span>
         </div>

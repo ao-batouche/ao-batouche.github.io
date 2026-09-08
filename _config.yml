@@ -8,12 +8,12 @@ middle_name:
 last_name: Batouche
 email: ao.Batouche@Gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Oussama Batouche is a data scientist and PhD candidate at the University of Helsinki working on AI, statistics, digital pathology, and prostate cancer research.
+  Oussama Batouche is a Member of Technical Staff at Qutwo and a University of Helsinki PhD graduate working on AI, machine learning, and applied research.
 footer_text: >
-keywords: Oussama Batouche, Abderrahim Oussama Batouche, Batouche, data scientist, PhD candidate, University of Helsinki, HUCC, Helsinki Urological Cancer Center, AI for healthcare, digital pathology, prostate cancer, machine learning, statistics, AI, RAG, LLMs  # add your own keywords or leave empty
+keywords: Oussama Batouche, Qutwo, artificial intelligence, machine learning, statistics, digital pathology, prostate cancer research
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
-icon: logo.png  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
+icon: favicon.webp  # optimized copy of the logo; image name in /assets/img/
 
 url: https://oussamabatouche.com # the base hostname & protocol for your site
 baseurl: # the subpath of your site. Leave blank for root
@@ -37,7 +37,7 @@ repo_trophies:
 # -----------------------------------------------------------------------------
 
 navbar_fixed: true
-footer_fixed: true
+footer_fixed: false
 
 # Dimensions
 max_width: 800px
@@ -112,8 +112,9 @@ research_interests:
   - Statistics
   - Data Science
 
-primary_affiliation_name: Helsinki Urological Cancer Center
-primary_affiliation_url: https://www.hucc.fi/
+job_title: Member of Technical Staff
+primary_affiliation_name: Qutwo
+primary_affiliation_url: https://qutwo.com/
 secondary_affiliation_name: University of Helsinki
 secondary_affiliation_url: https://www.helsinki.fi/en
 
@@ -153,6 +154,9 @@ giscus:
 # -----------------------------------------------------------------------------
 
 collections:
+  talks:
+    output: true
+    permalink: /talks/:path/
   news:
     defaults:
       layout: post
@@ -164,7 +168,7 @@ collections:
 
 announcements:
   enabled: true
-  scrollable: true # adds a vertical scroll bar if there are more than 3 news items
+  scrollable: false # show the latest items without a nested scroll area on phones
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 # -----------------------------------------------------------------------------
@@ -191,6 +195,16 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - assets/json/resume.json
+  - assets/plotly
+  - audit-results
+  - node_modules
+  - package.json
+  - package-lock.json
+  - README.md
+  - Dockerfile
+  - docker-compose.yml
+  - purgecss.config.js
 keep_files:
   - CNAME
   - .nojekyll
@@ -211,6 +225,12 @@ plugins:
 
 # Sitemap settings
 defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+      talk: true
   - scope:
       path: ""
       type: posts
@@ -268,13 +288,14 @@ scholar:
   group_by: year
   group_order: descending
 
-# Display different badges withs stats for your publications
+# Display different badges with stats for your publications
 enable_publication_badges:
+  google_scholar: true # Manually maintained counts in papers.bib; no external script
   altmetric: true # Altmetric badge (https://www.altmetric.com/products/altmetric-badges/)
   dimensions: true # Dimensions badge (https://badge.dimensions.ai/)
 
 # Filter out certain bibtex entry keywords used internally from the bib output
-filtered_bibtex_keywords: [abbr, abstract, arxiv, bibtex_show, html, pdf, selected, supp, code, poster, video, slides, website, preview, altmetric]
+filtered_bibtex_keywords: [abbr, abstract, arxiv, bibtex_show, html, pdf, selected, supp, code, poster, video, slides, website, preview, altmetric, google_scholar_id, google_scholar_citations, google_scholar_updated]
 
 # Maximum number of authors to be shown for each publication (more authors are visible on click)
 max_author_limit:  # leave blank to always show all authors
@@ -290,7 +311,7 @@ enable_publication_thumbnails: true
 # These are the defaults
 external_links:
   enabled: true
-  rel: external nofollow noopener
+  rel: external noopener noreferrer
   target: _blank
   exclude:
 
@@ -374,9 +395,8 @@ medium_zoom:
 # Get external JSON data
 # -----------------------------------------------------------------------------
 
-jekyll_get_json:
-  - data: resume
-    json: assets/json/resume.json # it can also be an url
+# The CV is maintained in _data/cv.yml; do not load the theme’s sample resume.
+jekyll_get_json: []
 jsonresume:
   - basics
   - work

@@ -25,9 +25,9 @@ Published paper: <a href='https://www.sciencedirect.com/science/article/pii/S235
 
 This work was accepted for presentation at the <a href='https://baltic.uroweb.org/'>Baltic-24 EAU</a> meeting (May 2024, Tallinn, Estonia) and <a href='https://iscb2024.info/'>ISCB-45</a> (July 2024, Thessaloniki, Greece).
 
-<center> 
-<h2 style="color: orange" >Joint Modeling to Assess the Relationship Between Time to Curative Treatment and Treatment Recurrence in PCa Patients</h2>
-</center>
+<div class="text-center">
+<h2 >Joint Modeling to Assess the Relationship Between Time to Curative Treatment and Treatment Recurrence in PCa Patients</h2>
+</div>
 
 <h3>Abstract </h3>
 <h4>Introduction and Objectives</h4>Conflicting evidence exists regarding the effect of prostate cancer (PCa) treatment delay on outcomes after curative treatment. PCa is

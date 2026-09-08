@@ -135,6 +135,56 @@ pages.select { |page| !page[:robots].include?('noindex') && page[:refresh].empty
   errors << "Duplicate canonical #{canonical}: #{matches.map { |page| page[:route] }.join(', ')}" if matches.length > 1
 end
 
+# Check routes and fragments, not only the CSS/image resources. A page can be
+# indexable while still containing dead navigation or publication links.
+pages_by_route = pages.to_h { |page| [page[:route], page] }
+pages.each do |page|
+  page[:document].css('a[href]').each do |link|
+    href = link['href'].to_s.strip
+    if href.empty?
+      errors << "#{page[:route]}: empty link (#{link.text.strip})"
+      next
+    end
+    next if href == '#' && link['role'] == 'button'
+    target = href.start_with?('#') ? page[:route] : normalize_internal_path.call(href, page[:route])
+    next unless target
+
+    decoded = URI::DEFAULT_PARSER.unescape(target)
+    disk_path = site_dir.join(decoded.delete_prefix('/'))
+    target_page = pages_by_route[target] || pages_by_route[target + '/']
+    unless target_page || disk_path.file? || disk_path.join('index.html').file?
+      errors << "#{page[:route]}: broken internal link #{href}"
+      next
+    end
+    fragment = URI(href).fragment
+    if fragment && !fragment.empty? && target_page
+      id = URI::DEFAULT_PARSER.unescape(fragment)
+      unless target_page[:document].css('[id], a[name]').any? { |node| node['id'] == id || node['name'] == id }
+        errors << "#{page[:route]}: missing anchor #{href}"
+      end
+    end
+  rescue URI::InvalidURIError
+    errors << "#{page[:route]}: invalid link #{href.inspect}"
+  end
+
+  page[:document].css('img:not([alt])').each do |image|
+    errors << "#{page[:route]}: image missing alt attribute #{image['src']}"
+  end
+  next if page[:robots].include?('noindex') || !page[:refresh].empty?
+
+  errors << "#{page[:route]}: expected exactly one main landmark" unless page[:document].css('main').length == 1
+  errors << "#{page[:route]}: missing responsive viewport" unless page[:document].at_css('meta[name="viewport"]')&.[]('content').to_s.include?('width=device-width')
+  errors << "#{page[:route]}: Open Graph URL differs from canonical" unless page[:document].at_css('meta[property="og:url"]')&.[]('content') == page[:canonical]
+  errors << "#{page[:route]}: missing social image" if page[:document].at_css('meta[property="og:image"]')&.[]('content').to_s.empty?
+end
+
+indexable_pages = pages.reject { |page| page[:robots].include?('noindex') || !page[:refresh].empty? }
+[:title, :description].each do |field|
+  indexable_pages.group_by { |page| page[field] }.each do |value, matches|
+    errors << "Duplicate #{field} on #{matches.map { |page| page[:route] }.join(', ')}" if !value.empty? && matches.length > 1
+  end
+end
+
 unless skip_asset_check
   pages.each do |page|
     references = []

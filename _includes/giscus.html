@@ -1,7 +1,17 @@
 <div id="giscus_thread" style="max-width: {{ site.max_width }}; margin: 0 auto;">
   {%- if site.giscus.repo -%}
+  <p id="giscus_fallback" hidden>Comments are available in <a href="https://github.com/{{ site.giscus.repo }}/discussions">GitHub discussions</a>.</p>
   <script>
-    let giscusTheme = localStorage.getItem("theme");
+    (function () {
+    // Giscus reads localStorage during startup. Keep the page usable when a
+    // browser's privacy settings deny that access.
+    try {
+      window.localStorage.getItem("giscus-session");
+    } catch (_) {
+      document.getElementById("giscus_fallback").hidden = false;
+      return;
+    }
+    let giscusTheme = document.documentElement.getAttribute("data-theme") || "preferred_color_scheme";
     let giscusAttributes = {
         "src": "https://giscus.app/client.js",
         "data-repo": "{{ site.giscus.repo }}",
@@ -14,6 +24,7 @@
         "data-emit-metadata": "{{ site.giscus.emit_metadata }}",
         "data-input-position": "{{ site.giscus.input_position }}",
         "data-theme": giscusTheme,
+        "data-loading": "lazy",
         "data-lang": "{{ site.giscus.lang }}",
         "crossorigin": "anonymous",
         "async": "",
@@ -23,12 +34,13 @@
     let giscusScript = document.createElement("script");
     Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
     document.getElementById("giscus_thread").appendChild(giscusScript);
+    })();
   </script>
-  <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript">comments powered by giscus.</a></noscript>
+  <noscript>Please enable JavaScript to view the <a href="https://giscus.app/?ref_noscript">comments powered by giscus.</a></noscript>
   {%- else -%}
   {% capture giscus_warning %}
   > ##### giscus comments misconfigured
-  > Please follow instructions at [http://giscus.app](http://giscus.app) and update your giscus configuration.
+  > Please follow instructions at [https://giscus.app](https://giscus.app) and update your giscus configuration.
   {: .block-danger }
   {% endcapture %}
   {{ giscus_warning | markdownify }}

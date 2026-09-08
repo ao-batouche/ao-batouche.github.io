@@ -30,9 +30,9 @@ This work was presented at the <a href='https://conferences.asco.org/gu/attend'>
     </div>
 </div>
 
-<center> 
-<h2 style="color: orange" >Computational Pathology-Based Classifier for Predicting Gleason Grade Group Upgrading on Radical Prostatectomy from Diagnostic Biopsies</h2>
-</center>
+<div class="text-center">
+<h2 >Computational Pathology-Based Classifier for Predicting Gleason Grade Group Upgrading on Radical Prostatectomy from Diagnostic Biopsies</h2>
+</div>
 
 Abstract available here: <a href='https://ascopubs.org/doi/pdf/10.1200/JCO.2025.43.5_suppl.329'>Click</a>.
 Full paper available upon request.

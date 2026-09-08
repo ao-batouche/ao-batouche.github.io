@@ -1,13 +1,7 @@
+const destination = process.env.JEKYLL_DESTINATION || "_site";
 module.exports = {
-    content: [
-        "_site/**/*.html",
-        "_site/**/*.js"
-    ],
-    css: [
-        "_site/assets/css/*.css"
-    ],
-    output: "_site/assets/css/",
-    skippedContentGlobs: [
-        "_site/assets/**/*.html"
-    ]
+  content: [destination + "/**/*.html", destination + "/**/*.js"],
+  css: [destination + "/assets/css/*.css"],
+  output: destination + "/assets/css/",
+  skippedContentGlobs: [destination + "/assets/**/*.html"]
 };

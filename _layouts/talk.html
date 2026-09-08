@@ -1,0 +1,45 @@
+---
+layout: default
+---
+<article class="talk-detail">
+  <a class="talk-back" href="{{ '/talks/' | relative_url }}"><span aria-hidden="true">←</span> All talks</a>
+  <header class="talk-detail-header">
+    <p class="talks-eyebrow">{{ page.event_short | escape }} · {{ page.talk_type | default: 'Conference presentation' | escape }}</p>
+    <h1>{{ page.title | escape }}</h1>
+    <p class="talk-detail-date">
+      {% if page.date_precision == 'year' %}
+      {{ page.date | date: '%Y' }}
+      {% else %}
+      <time datetime="{{ page.date | date: '%Y-%m-%d' }}">{% if page.event_dates %}{{ page.event_dates | escape }}{% else %}{{ page.date | date: '%B %-d, %Y' }}{% endif %}</time>
+      {% endif %}
+      {% if page.location %}<span aria-hidden="true">·</span> {{ page.location | escape }}{% endif %}
+    </p>
+    {% if page.award %}<p class="talk-detail-award">{{ page.award | escape }}</p>{% endif %}
+  </header>
+  <div class="talk-detail-photo">
+    {% if page.image %}
+      {% include figure.html path=page.image alt=page.image_alt loading='eager' %}
+      {% if page.photo_source %}<p class="talk-photo-credit">Photo from <a href="{{ page.photo_source }}">{{ page.photo_credit | default: 'the original event post' | escape }}</a>.</p>{% endif %}
+    {% else %}
+      {% include talk-photo-placeholder.html event=page.event_short location=page.location %}
+    {% endif %}
+  </div>
+  <div class="talk-detail-content">{{ content }}</div>
+  {% if page.publication_keys %}
+  <section class="talk-publications" aria-labelledby="related-research">
+    <h2 id="related-research">Related paper &amp; abstracts</h2>
+    <p>Read the research behind this presentation.</p>
+    <div class="publications">
+      {% for key in page.publication_keys %}
+        {% bibliography -f {{ site.scholar.bibliography }} -q @*[key={{ key }}] %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+  {% if page.sources %}
+  <section class="talk-sources" aria-labelledby="talk-sources">
+    <h2 id="talk-sources">Event &amp; further reading</h2>
+    <ul>{% for source in page.sources %}<li><a href="{{ source.url }}">{{ source.title | escape }}</a></li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+</article>

@@ -1,0 +1,11 @@
+{
+  "name": "oussama-batouche-website-checks",
+  "private": true,
+  "scripts": {
+    "audit:browser": "node bin/audit-browser.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "playwright": "1.63.0"
+  }
+}

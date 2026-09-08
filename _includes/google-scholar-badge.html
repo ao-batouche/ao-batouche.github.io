@@ -1,0 +1,27 @@
+{%- comment -%}
+  These are manually verified snapshots, not live metrics. Require a complete
+  record and a nonnegative integer; missing or malformed counts must not become 0.
+{%- endcomment -%}
+{%- assign scholar_user = site.scholar_userid | append: '' | strip -%}
+{%- assign scholar_record = include.entry.google_scholar_id | append: '' | strip -%}
+{%- assign scholar_count_text = include.entry.google_scholar_citations | append: '' | strip -%}
+{%- assign scholar_count = scholar_count_text | plus: 0 | floor -%}
+{%- assign scholar_normalized_count = scholar_count | append: '' -%}
+{%- assign scholar_updated = include.entry.google_scholar_updated | append: '' | strip -%}
+{%- if site.enable_publication_badges.google_scholar and scholar_user != '' and scholar_record != '' and scholar_updated != '' and scholar_count_text == scholar_normalized_count and scholar_count >= 0 -%}
+  {%- capture scholar_record_key -%}{{ scholar_user }}:{{ scholar_record }}{%- endcapture -%}
+  <div class="scholar-citations">
+    <a class="scholar-citation-badge" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user={{ scholar_user | url_encode }}&amp;citation_for_view={{ scholar_record_key | url_encode }}" aria-label="View this publication on Google Scholar ({{ scholar_count }} {% if scholar_count == 1 %}citation{% else %}citations{% endif %})">
+      Google Scholar <strong>{{ scholar_count }} {% if scholar_count == 1 %}citation{% else %}citations{% endif %}</strong>
+    </a>
+    {%- assign scholar_tooltip_id = include.entry.key | default: scholar_record | slugify | append: '-scholar-info' -%}
+    <div class="scholar-info">
+      <button class="scholar-info-button" type="button" aria-label="Citation count details" aria-describedby="{{ scholar_tooltip_id }}">
+        <span aria-hidden="true">i</span>
+      </button>
+      <div class="scholar-info-tooltip" id="{{ scholar_tooltip_id }}" role="tooltip">
+        <div class="scholar-info-detail">Checked <time datetime="{{ scholar_updated | escape }}">{{ scholar_updated | date: '%b %-d, %Y' }}</time></div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

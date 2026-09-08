@@ -1,46 +1,46 @@
-<div class="news">
-  {% if site.news != blank -%}
-  {%- assign news_size = site.news | size -%}
-  <div class="table-responsive" {% if include.limit and site.announcements.scrollable and news_size > 3 %}style="max-height: 60vw"{% endif %}>
-    <table class="table table-sm table-borderless">
-    {%- assign news = site.news | reverse -%}
-    {% if include.limit and site.announcements.limit %}
-    {% assign news_limit = site.announcements.limit %}
-    {% else %}
-    {% assign news_limit = news_size %}
-    {% endif %}
-    {% assign shown_news = 0 %}
-
-    {% for item in news %}
-      {% assign item_title = item.title | default: "" | downcase %}
-
-      {% if item_title contains "talk" %}
-        {% if shown_news >= news_limit %}
-          {% break %}
-        {% endif %}
-
-        {% assign shown_news = shown_news | plus: 1 %}
-
-        <tr>
-          <th scope="row" style="width: 20%">
-            {{ item.date | date: "%b %-d, %Y" }}
-          </th>
-          <td>
-            {% if item.inline -%}
-              {{ item.content | remove: '<p>' | remove: '</p>' | emojify }}
-            {%- else -%}
-              <a class="news-title" href="{{ item.url | relative_url }}">
-                {{ item.title }}
-              </a>
-            {%- endif %}
-          </td>
-        </tr>
-      {% endif %}
-    {% endfor %}
-    
-    </table>
-  </div>
-{%- else -%}
-  <p>No news so far...</p>
-{%- endif %}
+{% assign talks = site.talks | concat: site.news | where: 'talk', true | sort: 'date' | reverse %}
+{% if talks.size > 0 %}
+<div class="talks-toolbar">
+  <span>{{ talks.size }} talks &amp; presentations</span>
+  <span>Latest to oldest <span aria-hidden="true">↓</span></span>
 </div>
+<div class="talks-grid">
+  {% for item in talks %}
+  {% assign talk_title = item.talk_title | default: item.title %}
+  <article class="talk-card{% if forloop.first %} talk-card--featured{% endif %}" data-talk-date="{{ item.date | date: '%Y-%m-%d' }}">
+    <a class="talk-card-link" href="{{ item.url | relative_url }}" aria-labelledby="talk-title-{{ forloop.index }}">
+      <div class="talk-card-media{% if item.image %} talk-card-media--photo{% endif %}"{% if item.image_position %} style="--talk-image-position: {{ item.image_position | escape }}"{% endif %}>
+        {% if item.image %}
+          {% assign image_loading = 'lazy' %}
+          {% if forloop.first %}{% assign image_loading = 'eager' %}{% endif %}
+          {% include figure.html path=item.image alt=item.image_alt sizes='(min-width: 800px) 375px, (min-width: 640px) 46vw, calc(100vw - 32px)' loading=image_loading %}
+        {% else %}
+          {% include talk-photo-placeholder.html event=item.event_short location=item.location %}
+        {% endif %}
+        {% if forloop.first %}<span class="talk-card-feature">Latest talk</span>{% endif %}
+      </div>
+      <div class="talk-card-body">
+        <div class="talk-card-meta">
+          <span>{{ item.talk_type | default: 'Research talk' }}</span>
+          {% if item.date_precision == 'year' %}
+          <span class="talk-card-date">{{ item.date | date: '%Y' }}</span>
+          {% else %}
+          <time datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: '%b %Y' }}</time>
+          {% endif %}
+        </div>
+        <p class="talk-card-event">{{ item.event_short | escape }}</p>
+        <h2 id="talk-title-{{ forloop.index }}">{{ talk_title | escape }}</h2>
+        {% if item.location %}<p class="talk-card-location">{{ item.location | escape }}</p>{% endif %}
+        <p class="talk-card-summary">{{ item.talk_summary | default: item.description | escape }}</p>
+        <div class="talk-card-footer">
+          {% if item.award %}<span class="talk-card-award">{{ item.award | escape }}</span>{% endif %}
+          <span class="talk-card-cta">Explore talk <span aria-hidden="true">↗</span></span>
+        </div>
+      </div>
+    </a>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p>Talks and presentations will appear here.</p>
+{% endif %}

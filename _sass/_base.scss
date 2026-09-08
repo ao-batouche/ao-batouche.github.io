@@ -70,8 +70,10 @@ table.table a {
 
 figure,
 img {
-  max-width: 90vw;
+  max-width: 100%;
 }
+
+img { height: auto; }
 
 blockquote {
   background: var(--global-muted-bg-color);
@@ -809,12 +811,13 @@ footer.sticky-bottom {
 
   .grid-sizer,
   .grid-item {
-    width: 250px;
-    margin-bottom: 10px;
+    min-width: 0;
+    width: 100%;
+    margin-bottom: 0;
   }
 
   h2.category {
-    color: var(--global-divider-color);
+    color: var(--global-text-color-light);
     border-bottom: 1px solid var(--global-divider-color);
     padding-top: 0.5rem;
     margin-top: 2rem;
@@ -1037,11 +1040,11 @@ footer.sticky-bottom {
   }
 
   h2.bibliography {
-    color: var(--global-divider-color);
+    color: var(--global-text-color-light);
     border-top: 1px solid var(--global-divider-color);
     padding-top: 1rem;
     margin-top: 2rem;
-    margin-bottom: -2rem;
+    margin-bottom: 0;
     text-align: right;
   }
 
@@ -1121,7 +1124,7 @@ footer.sticky-bottom {
       }
 
       .links {
-        a.btn {
+        .btn {
           color: var(--global-text-color);
           border: 1px solid var(--global-divider-color);
           border-radius: 999px;

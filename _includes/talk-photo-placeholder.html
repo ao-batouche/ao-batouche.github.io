@@ -1,0 +1,6 @@
+<div class="talk-photo-placeholder">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8" cy="9" r="1.5"/><path d="m3 16 5-4 4 4 4-6 5 7"/></svg>
+  <span class="talk-placeholder-event">{{ include.event | default: 'Research talk' | escape }}</span>
+  {% if include.location %}<span class="talk-placeholder-location">{{ include.location | escape }}</span>{% endif %}
+  <span class="talk-placeholder-note">Photo to be added</span>
+</div>

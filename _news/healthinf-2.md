@@ -7,4 +7,4 @@ robots: noindex,follow
 related_posts: false
 ---
 
-<a href='https://healthinf.scitevents.org/'>HEALTHINF 2024</a>: Conference presentation in Rome, Italy.
+<a href="{{ '/talks/healthinf-2024/' | relative_url }}">HEALTHINF 2024: Conference presentation</a> in Rome, Italy.

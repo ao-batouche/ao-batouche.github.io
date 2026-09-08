@@ -2,6 +2,7 @@
 layout: about
 title: About
 permalink: /about/
+canonical_url: /
 sitemap: false
 robots: noindex, follow
 description: About Oussama Batouche, MTS at Qutwo working on AI for the Quantum era.

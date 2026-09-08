@@ -11,7 +11,7 @@
 - title: Experience
   type: time_table
   contents:
-    - title: Member of Technical Stuff
+    - title: Member of Technical Staff
       institution: <a href='https://Qutwo.com'>Qutwo</a>, Helsinki, Finland
       logos:
         - image: cv/logos/qutwo.png
@@ -31,7 +31,7 @@
       logos:
         - image: cv/logos/university-helsinki.svg
           url: https://www.helsinki.fi/en
-      year: 2022.2026
+      year: 2022–2026
 
     - title: Visiting Fellow
       institution: Georgia Tech & Emory University, Atlanta, GA
@@ -52,8 +52,8 @@
           url: https://www.kaust.edu.sa/
       year: 2024
       description:
-        - Research visit to the <a href="https://cemse.kaust.edu.sa/bayescomp">Bayesian Computational Statistics & Modeling Group</a> lead by <a href='https://scholar.google.com/citations?user=VJOn_ZkAAAAJ&hl=en'>Prof. Håavard Rue</a>
-        - I was trained on how use INLA Joint library to build joint survival models. Supervised by prostdoctoral fellow <a href='https://scholar.google.com/citations?user=qAouGLIAAAAJ&hl=en'>Denis Rustand</a>.
+        - Research visit to the <a href="https://cemse.kaust.edu.sa/bayescomp">Bayesian Computational Statistics & Modeling Group</a> led by <a href='https://scholar.google.com/citations?user=VJOn_ZkAAAAJ&hl=en'>Prof. Håvard Rue</a>.
+        - Training in the INLAjoint library for joint survival models, supervised by postdoctoral fellow <a href='https://scholar.google.com/citations?user=qAouGLIAAAAJ&hl=en'>Denis Rustand</a>.
 
     - title: Research Assistant
       institution: Aalto University, Espoo, Finland
@@ -71,7 +71,7 @@
           url: https://www.aalto.fi/en
       year: 2020
       description: 
-        - During six months internship for my gradutation project, I worked on object detection based on real-time video streaming for autonomous vehicules.
+        - During a six-month internship for my graduation project, I worked on object detection using real-time video streaming for autonomous vehicles.
         - Supervisors <a href='https://scholar.google.fi/citations?user=o1Ap0TEAAAAJ&hl=en'>Prof. Tarik Taleb </a> and <a href='https://www.researchgate.net/profile/Oussama-Marai'>Dr. Oussama El Marai </a>
 
     - title: Software Engineer
@@ -79,7 +79,7 @@
       logos:
         - image: cv/logos/i2b.png
           url: https://i2b-dz.com/
-      year: 2019.2026
+      year: 2019–2026
 
 - title: Education
   type: time_table

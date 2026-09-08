@@ -12,10 +12,10 @@ tags:
 giscus_comments: true
 ---
 
-This is my master's thesis work. I have translated the abstract, but the thesis PDF is still in French.
+This project presents my master's thesis research. The abstract below is translated from the original French thesis.
 
-<center> 
-<h2 style="color: orange" >Title: Object Detection Based on Real-Time Video Streaming</h2>
+<div>
+<h2>Title: Object Detection Based on Real-Time Video Streaming</h2>
 <h3>Abstract </h3>
 <p>The integration of artificial intelligence and the Internet of Things (IoT) has been an active research topic in recent years, particularly with the emergence of high-speed internet and 5G. Connected machines are increasingly required to perform difficult tasks that cannot be easily carried out under human control.
 
@@ -24,13 +24,9 @@ This thesis proposes an approach that uses an onboard camera, a Global Positioni
 This approach is more cost-effective and adaptable to autonomous vehicle environments. Our framework improved execution time, including latency, by dividing tasks into parallel processes. This reduced processing time, and we implemented object detection using YOLO V4, with the ability to perform calculations on the connected device to save time and distribute tasks.
 
 The test results showed that the object tracking framework we designed performed well in overcoming obstacles along the route. Its implementation achieved promising performance, opening the possibility of exploring new applications in domains such as tourism and crime prevention.</p>
-<object src= "../../assets/pdf/Batouche_CV.pdf" 
-            type="application/pdf" 
-            width= "800"
-            height= "500">
-</object>
 
-</center>
+
+</div>
 
 <br>
 <p>

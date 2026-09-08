@@ -7,4 +7,4 @@ robots: noindex,follow
 related_posts: false
 ---
 
-🎉 Second prize from <a href='https://www.uroweb.org/'>EAU</a> at the <a href='https://baltic.uroweb.org/'>Baltic-24</a> meeting.
+🎉 Second prize from <a href='https://www.uroweb.org/'>EAU</a> for my <a href="{{ '/talks/eau-baltic-2024/' | relative_url }}">Baltic-24 presentation</a> in Tallinn, Estonia.

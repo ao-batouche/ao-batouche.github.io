@@ -20,9 +20,9 @@ Preprint: <a href='https://www.medrxiv.org/content/10.1101/2024.01.10.24300922v1
 Published version: <a href='https://bjui-journals.onlinelibrary.wiley.com/doi/10.1111/bju.70109?utm_medium=article&utm_source=researchgate.net' target="_blank">DOI: 0.1111/bju.70109</a>
 
 <br>
-<center> 
-<h2 style="color: orange" >MRI-Targeted Prostate Biopsy Introduces Grade Inflation and Overtreatment</h2>
-</center>
+<div class="text-center">
+<h2 >MRI-Targeted Prostate Biopsy Introduces Grade Inflation and Overtreatment</h2>
+</div>
 
 <h3>Abstract </h3>
 <h4>Background:</h4> The use of MRI-targeted biopsies has led to lower detection of Gleason Grade Group 1 (GG1) prostate cancer and increased detection of GG2 disease. Although this finding is generally attributed to improved sensitivity and specificity of MRI for aggressive cancer, it might also be explained by grade inflation.

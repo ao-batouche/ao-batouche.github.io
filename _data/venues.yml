@@ -4,7 +4,11 @@
 
 "BJUI":
   url: https://www.bjuinternational.com/
-  color: "#eb600c"
+  color: "#b44809"
+
+"JPI":
+  url: https://www.sciencedirect.com/journal/journal-of-pathology-informatics
+  color: "#0067a5"
 
 "ASCO":
   url: https://www.asco.org/
@@ -12,7 +16,7 @@
 
 "EAU":
   url: https://www.europeanurology.com/
-  color: "#f37920"
+  color: "#a94a08"
 
 "arXiv":
   url: https://arxiv.org/
@@ -24,7 +28,7 @@
 
 "biostec":
   url: https://biostec.scitevents.org/
-  color: "#6a80a6"
+  color: "#52688a"
 
 
 "AJP":

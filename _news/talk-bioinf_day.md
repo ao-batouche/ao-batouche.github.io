@@ -1,8 +1,17 @@
 ---
 layout: post
+talk: true
+talk_title: Multimodal machine learning across institutional cohorts
+event_short: Bioinformatics Day 2026
+location: Espoo, Finland
+talk_type: Research talk
+image: assets/img/news/batouche_bioinformatics_day_2026.jpeg
+image_position: right bottom
+image_alt: Oussama Batouche presenting at Bioinformatics Day 2026 in Espoo
+talk_summary: Predicting adverse prostate cancer pathology with multimodal models trained on multi-institutional data.
 date: 2026-05-29
 inline: false
-title: "Talk: Multi-model Machine learning models from cross-institutional cohorts"
+title: "Talk: Multimodal machine learning models from cross-institutional cohorts"
 description: A Bioinformatics Day 2026 talk on multimodal machine-learning models trained on cross-institutional cohorts to predict adverse prostate cancer pathology.
 related_posts: false
 ---

@@ -7,4 +7,4 @@ robots: noindex,follow
 related_posts: false
 ---
 
-<a href="">🚨 Journal paper</a> accepted by <a target="_blank" rel="noopener noreferrer" href='https://www.bjuinternational.com/'>BJU International</a>.
+<a href="https://doi.org/10.1111/bju.70109">🚨 Journal paper</a> accepted by <a target="_blank" rel="noopener noreferrer" href='https://www.bjuinternational.com/'>BJU International</a>.

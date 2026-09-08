@@ -7,4 +7,4 @@ robots: noindex,follow
 related_posts: false
 ---
 
-<a href="#">🚨 Two abstracts</a> accepted at <a href='https://baltic.uroweb.org/'>Baltic-24 EAU</a>.
+🚨 Two abstracts accepted at <a href='https://baltic.uroweb.org/'>Baltic-24 EAU</a>.

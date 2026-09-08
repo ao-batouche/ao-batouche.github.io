@@ -1,0 +1,67 @@
+#!/usr/bin/env ruby
+# Run with: bundle exec ruby bin/test-scholar-citations
+require 'liquid'
+require 'minitest/autorun'
+require_relative '../_plugins/hideCustomBibtex'
+
+class ScholarCitationsTest < Minitest::Test
+  TEMPLATE = File.read(File.expand_path('../_includes/google-scholar-badge.html', __dir__))
+
+  def render_badge(fields = {}, site_fields = {})
+    entry = {
+      'google_scholar_id' => 'record_id',
+      'google_scholar_citations' => '7',
+      'google_scholar_updated' => '2026-09-08'
+    }.merge(fields)
+    site = {
+      'scholar_userid' => 'profile_id',
+      'enable_publication_badges' => { 'google_scholar' => true }
+    }.merge(site_fields)
+    Liquid::Template.parse(TEMPLATE).render!('include' => { 'entry' => entry }, 'site' => site)
+  end
+
+  def test_positive_zero_and_singular_counts
+    { '7' => '7 citations', '0' => '0 citations', '1' => '1 citation', '125' => '125 citations' }.each do |count, label|
+      html = render_badge('google_scholar_citations' => count)
+      assert_includes html, "<strong>#{label}</strong>"
+      assert_includes html, 'datetime="2026-09-08"'
+      assert_includes html, 'Sep 8, 2026'
+      assert_includes html, 'citation_for_view=profile_id%3Arecord_id'
+    end
+  end
+
+  def test_invalid_or_missing_counts_never_become_zero
+    [nil, '', ' ', 'N/A', '-1', '7abc', '1.5'].each do |count|
+      assert_empty render_badge('google_scholar_citations' => count), "Unexpected badge for #{count.inspect}"
+    end
+  end
+
+  def test_incomplete_or_disabled_records_are_hidden
+    %w[google_scholar_id google_scholar_updated].each do |field|
+      [nil, ''].each { |value| assert_empty render_badge(field => value) }
+    end
+    assert_empty render_badge({}, 'scholar_userid' => '')
+    assert_empty render_badge({}, 'enable_publication_badges' => { 'google_scholar' => false })
+    assert_empty render_badge({}, 'enable_publication_badges' => false)
+  end
+
+  def test_fields_do_not_leak_between_publications
+    template = Liquid::Template.parse('{% for entry in entries %}' + TEMPLATE.gsub('include.entry.', 'entry.') + '{% endfor %}')
+    entries = [
+      { 'google_scholar_id' => 'first', 'google_scholar_citations' => '7', 'google_scholar_updated' => '2026-09-08' },
+      { 'google_scholar_id' => 'second' }
+    ]
+    html = template.render!('entries' => entries, 'site' => { 'scholar_userid' => 'profile_id', 'enable_publication_badges' => { 'google_scholar' => true } })
+    assert_equal 1, html.scan('class="scholar-citation-badge"').length
+    refute_includes html, 'profile_id%3Asecond'
+  end
+
+  def test_display_only_metadata_can_be_removed_from_bibtex
+    fields = %w[google_scholar_id google_scholar_citations google_scholar_updated]
+    input = "@article{paper,\n  doi = {10.1234/example},\n" + fields.map { |field| "  #{field} = {value},\n" }.join + "}\n"
+    site = Struct.new(:config).new({ 'filtered_bibtex_keywords' => fields })
+    output = Liquid::Template.parse('{{ bibtex | hideCustomBibtex }}').render!({ 'bibtex' => input }, registers: { site: site })
+    fields.each { |field| refute_includes output, field }
+    assert_includes output, 'doi = {10.1234/example}'
+  end
+end

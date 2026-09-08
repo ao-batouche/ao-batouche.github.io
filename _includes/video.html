@@ -1,47 +1,23 @@
 {% assign extension = include.path | split:'.' | last %}
-
-<figure>
-
+{% assign media_title = include.title | default: include.alt | default: page.title %}
+<figure class="media-figure">
   {% if extension == "mp4" or extension == "webm" or extension == "ogg" %}
-
   <video
-  src="{% if include.cache_bust %}{{ include.path | relative_url | bust_file_cache }}{% else %}{{ include.path | relative_url }}{% endif %}"
+    src="{% if include.cache_bust %}{{ include.path | relative_url | bust_file_cache }}{% else %}{{ include.path | relative_url }}{% endif %}"
     {% if include.class %}class="{{ include.class }}"{% endif %}
-    {% if include.width %}width="{{ include.width }}"{% else %}width="auto"{% endif %}
-    {% if include.height %}height="{{ include.height }}"{% else %}height="auto"{% endif %}
-    {% if include.min-width %}min-width="{{ include.min-width }}"{% endif %}
-    {% if include.min-height %}min-height="{{ include.min-height }}"{% endif %}
-    {% if include.max-width %}max-width="{{ include.max-width }}"{% endif %}
-    {% if include.max-height %}height="{{ include.max-height }}"{% endif %}
-    {% if include.title %}title="{{ include.title }}"{% endif %}
-    {% if include.alt %}alt="{{ include.alt }}"{% endif %}
+    aria-label="{{ media_title | escape }}" preload="metadata" playsinline
     {% if include.autoplay %}autoplay{% endif %}
     {% if include.controls %}controls{% endif %}
     {% if include.loop %}loop{% endif %}
     {% if include.muted %}muted{% endif %}
-    {% if include.poster %}poster="{{ include.poster }}"{% endif %}
-  />
-
+    {% if include.poster %}poster="{{ include.poster | relative_url }}"{% endif %}>
+    <a href="{{ include.path | relative_url }}">Download the video</a>.
+  </video>
   {% else %}
-
-  <iframe
-    src="{{ include.path }}"
+  <iframe src="{{ include.path }}" title="{{ media_title | escape }}" loading="lazy"
     {% if include.class %}class="{{ include.class }}"{% endif %}
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-    {% if include.width %}width="{{ include.width }}"{% else %}width="auto"{% endif %}
-    {% if include.height %}height="{{ include.height }}"{% else %}height="auto"{% endif %}
-    {% if include.min-width %}min-width="{{ include.min-width }}"{% endif %}
-    {% if include.min-height %}min-height="{{ include.min-height }}"{% endif %}
-    {% if include.max-width %}max-width="{{ include.max-width }}"{% endif %}
-    {% if include.max-height %}height="{{ include.max-height }}"{% endif %}
-    {% if include.alt %}alt="{{ include.alt }}"{% endif %}
-    {% if include.title %}title="{{ include.title }}"{% endif %}
-  />
-
+    allow="fullscreen; picture-in-picture" allowfullscreen></iframe>
+  <p><a href="{{ include.path }}" target="_blank" rel="noopener noreferrer">Open {{ media_title | escape }} in a new tab</a>.</p>
   {% endif %}
-
   {%- if include.caption -%}<figcaption class="caption">{{ include.caption }}</figcaption>{%- endif %}
-
 </figure>

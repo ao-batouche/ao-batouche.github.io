@@ -3,12 +3,12 @@
       <li class="list-group-item">
         <div class="row">
           {% if content.year %}
-            <div class="col-xs-2 cl-sm-2 col-md-2 text-center" style="width: 75px;">
+            <div class="col-12 col-md-3 cv-year">
               <table class="table-cv">
                 <tbody>
                   <tr>
                     <td>
-                      <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px;">{{ content.year }}</span>
+                      <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" >{{ content.year }}</span>
                     </td>
                   </tr>
                   {% if content.location %}
@@ -23,12 +23,12 @@
 
             </div>
           {% endif %}
-          <div class="col-xs-10 cl-sm-10 col-md-10 mt-2 mt-md-0">
+          <div class="col-12 col-md-9 mt-2 mt-md-0">
             {% if content.title %}
-            <h6 class="title font-weight-bold ml-1 ml-md-4">{{content.title}}</h6>
+            <h3 class="title font-weight-bold">{{content.title}}</h3>
             {% endif %}
             {% if content.department or content.institution %}
-            <table class="table-cv ml-1 ml-md-4 institution">
+            <table class="table-cv  institution">
             <tbody>
               {% if content.institution %}
               <tr>
@@ -38,11 +38,11 @@
                     {% for logo in content.logos %}
                     {% if logo.url %}
                     <a class="cv-logo-frame{% if logo.class %} cv-logo-frame--{{ logo.class }}{% endif %}" href="{{ logo.url }}" target="_blank" rel="external nofollow noopener" aria-label="{% if logo.label %}Visit {{ logo.label }}{% else %}Visit organization website{% endif %}">
-                      <img src="{{ logo.image | prepend: 'assets/img/' | relative_url }}" alt="">
+                      <img src="{{ logo.image | prepend: 'assets/img/' | relative_url }}" alt="" width="49" height="34" loading="lazy" decoding="async">
                     </a>
                     {% else %}
                     <span class="cv-logo-frame{% if logo.class %} cv-logo-frame--{{ logo.class }}{% endif %}">
-                      <img src="{{ logo.image | prepend: 'assets/img/' | relative_url }}" alt="">
+                      <img src="{{ logo.image | prepend: 'assets/img/' | relative_url }}" alt="" width="49" height="34" loading="lazy" decoding="async">
                     </span>
                     {% endif %}
                     {% endfor %}
@@ -51,11 +51,11 @@
                   <span class="cv-logo-stack">
                     {% if content.logo_url %}
                     <a class="cv-logo-frame" href="{{ content.logo_url }}" target="_blank" rel="external nofollow noopener" aria-label="Visit organization website">
-                      <img src="{{ content.logo | prepend: 'assets/img/' | relative_url }}" alt="">
+                      <img src="{{ content.logo | prepend: 'assets/img/' | relative_url }}" alt="" width="49" height="34" loading="lazy" decoding="async">
                     </a>
                     {% else %}
                     <span class="cv-logo-frame">
-                      <img src="{{ content.logo | prepend: 'assets/img/' | relative_url }}" alt="">
+                      <img src="{{ content.logo | prepend: 'assets/img/' | relative_url }}" alt="" width="49" height="34" loading="lazy" decoding="async">
                     </span>
                     {% endif %}
                   </span>
@@ -76,7 +76,7 @@
             </table>
             {% endif %}
             {% if content.maindescription %}
-              <div class="ml-1 ml-md-4 ">{{ content.maindescription }}</div>
+              <div class=" ">{{ content.maindescription }}</div>
             {% endif %}
             {% if content.description %}
               <ul class="items">
@@ -115,7 +115,7 @@
               </ul>
             {% endif %}
             {% if content.linkitems %}
-              <div class="container-links ml-1 ml-md-4">
+              <div class="container-links ">
               {% for item in content.linkitems %}
                   {% if item.link %}
                     <div class="container-link-button">

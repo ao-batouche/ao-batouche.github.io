@@ -16,31 +16,33 @@
   <!-- Body -->
   <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}" data-bootstrap-table="{% if page.datatable %}true{% else %}false{% endif %}">
 
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
     <!-- Header -->
     {%- include header.html %}
 
     <!-- Content -->
-    <div class="container mt-5">
+    <main id="main-content" class="container mt-5" tabindex="-1">
       {% if page.toc and page.toc.sidebar %}
         {% if page.toc.sidebar == "right" %}
         <div class="row">
           <!-- main content area -->
-          <div class="col-sm-9">
+          <div class="col-lg-9">
             {{ content }}
           </div>
           <!-- sidebar, which will move to the top on a small screen -->
-          <div class="col-sm-3">
-            <nav id="toc-sidebar" class="sticky-top"></nav>
+          <div class="col-lg-3 toc-column">
+            <nav id="toc-sidebar" class="sticky-top" aria-label="On this page"></nav>
           </div>
         </div>
         {% else %}
         <div class="row">
           <!-- sidebar, which will move to the top on a small screen -->
-          <div class="col-sm-3">
-            <nav id="toc-sidebar" class="sticky-top"></nav>
+          <div class="col-lg-3 toc-column">
+            <nav id="toc-sidebar" class="sticky-top" aria-label="On this page"></nav>
           </div>
           <!-- main content area -->
-          <div class="col-sm-9">
+          <div class="col-lg-9">
             {{ content }}
           </div>
         </div>
@@ -48,7 +50,7 @@
       {% else %}
         {{ content }}
       {% endif %}
-    </div>
+    </main>
 
     <!-- Footer -->
     {%- include footer.html %}

@@ -1,1 +1,1 @@
-document.addEventListener("DOMContentLoaded",function(){document.getElementById("light-toggle").addEventListener("click",function(){toggleTheme(localStorage.getItem("theme"))})});
+document.addEventListener("DOMContentLoaded",function(){setTheme(document.documentElement.getAttribute("data-theme")||"light",!1);const t=document.getElementById("light-toggle");t&&t.addEventListener("click",function(){setTheme("dark"===document.documentElement.getAttribute("data-theme")?"light":"dark")})});

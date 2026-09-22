@@ -8,9 +8,9 @@ middle_name:
 last_name: Batouche
 email: ao.Batouche@Gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Oussama Batouche is a Member of Technical Staff at Qutwo and a University of Helsinki PhD graduate working on AI, machine learning, and applied research.
+  Oussama Batouche is a Member of Technical Staff at QuTwo and a University of Helsinki PhD graduate working on AI, machine learning, and applied research.
 footer_text: >
-keywords: Oussama Batouche, Qutwo, artificial intelligence, machine learning, statistics, digital pathology, prostate cancer research
+keywords: Oussama Batouche, QuTwo, artificial intelligence, machine learning, statistics, digital pathology, prostate cancer research
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: favicon.webp  # optimized copy of the logo; image name in /assets/img/
@@ -113,7 +113,7 @@ research_interests:
   - Data Science
 
 job_title: Member of Technical Staff
-primary_affiliation_name: Qutwo
+primary_affiliation_name: QuTwo
 primary_affiliation_url: https://qutwo.com/
 secondary_affiliation_name: University of Helsinki
 secondary_affiliation_url: https://www.helsinki.fi/en

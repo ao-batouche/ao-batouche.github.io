@@ -7,13 +7,14 @@
 
 <section class="institution-marquee-section" aria-label="{{ marquee_aria_label }}">
   <p class="institution-marquee-label">{{ marquee_label }}</p>
-  <div class="institution-marquee">
+  <div class="institution-marquee" tabindex="0" role="region" aria-label="{{ marquee_aria_label }} logos. Scroll, drag, or use the arrow keys to explore.">
     <div class="institution-marquee-track">
       {% for copy in (1..2) %}
       <div class="institution-logo-set"{% if copy == 2 %} aria-hidden="true"{% endif %}>
         {% for institution in marquee_items %}
-        <a class="institution-logo" href="{{ institution.url }}" target="_blank" rel="noopener noreferrer"{% if copy == 1 %} aria-label="{{ institution.name }}, {{ institution.country }}"{% else %} tabindex="-1"{% endif %}>
-          <img{% if institution.logo_class %} class="{{ institution.logo_class }}"{% endif %} src="{{ '/assets/img/institutions/' | append: institution.logo | relative_url }}" alt="{% if copy == 1 %}{{ institution.name }}{% endif %}" width="124" height="50" loading="lazy" decoding="async">
+        <a class="institution-logo{% if institution.class %} institution-logo--{{ institution.class }}{% endif %}" href="{{ institution.url }}" target="_blank" rel="noopener noreferrer" draggable="false"{% if copy == 1 %} aria-label="{{ institution.name }}, {{ institution.country }}"{% else %} tabindex="-1"{% endif %}>
+          <img class="{{ institution.logo_class }}{% if institution.logo_dark %} theme-logo-light{% endif %}" src="{{ '/assets/img/institutions/' | append: institution.logo | relative_url }}" alt="{% if copy == 1 %}{{ institution.name }}{% endif %}" width="124" height="50" loading="lazy" decoding="async" draggable="false">
+          {% if institution.logo_dark %}<img class="{{ institution.logo_class }} theme-logo-dark" src="{{ '/assets/img/institutions/' | append: institution.logo_dark | relative_url }}" alt="{% if copy == 1 %}{{ institution.name }}{% endif %}" width="124" height="50" loading="lazy" decoding="async" draggable="false">{% endif %}
           <span class="institution-logo-details">
             <span class="institution-logo-name">{{ institution.name }}</span>
             <span class="institution-logo-country">{{ institution.country }}</span>

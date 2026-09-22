@@ -1,3 +1,19 @@
+- name: QuTwo
+  country: Finland
+  logo: qutwo-horizontal.svg
+  logo_class: institution-logo-image--wide
+  url: https://qutwo.com/
+- name: AMD
+  country: United States
+  # Source: https://newsroom.amd.com/_astro/amd-header-logo.NP9ywpkQ.svg
+  logo: amd.svg
+  logo_class: institution-logo-image--inverse
+  url: https://www.amd.com/
+- name: F-Secure
+  country: Finland
+  # Source: https://assets.f-secure.com/i/logos/f-secure-logo.svg
+  logo: f-secure.svg
+  url: https://www.f-secure.com/
 - name: University of Helsinki
   country: Finland
   logo: helsinki.png

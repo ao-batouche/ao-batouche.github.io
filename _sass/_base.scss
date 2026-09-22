@@ -880,21 +880,35 @@ footer.sticky-bottom {
 }
 
 .institution-marquee {
-  overflow: hidden;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 3px 0 8px;
+  scrollbar-width: thin;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 
-  &:hover .institution-marquee-track,
-  &:focus-within .institution-marquee-track {
-    animation-play-state: paused;
+  &.is-draggable {
+    cursor: grab;
+    user-select: none;
+
+    .institution-logo {
+      cursor: inherit;
+    }
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 3px;
   }
 }
 
 .institution-marquee-track {
-  animation: institution-scroll 55s linear infinite;
   display: flex;
   width: max-content;
-  will-change: transform;
 }
 
 .institution-logo-set {
@@ -902,6 +916,14 @@ footer.sticky-bottom {
   flex-shrink: 0;
   gap: 0.85rem;
   padding-right: 0.85rem;
+}
+
+.institution-logo-set[aria-hidden="true"] {
+  display: none;
+}
+
+.institution-marquee.is-draggable .institution-logo-set[aria-hidden="true"] {
+  display: flex;
 }
 
 .institution-logo {
@@ -964,6 +986,15 @@ footer.sticky-bottom {
   width: 140px;
 }
 
+.institution-logo-image--inverse {
+  filter: invert(1);
+}
+
+html:not([data-theme="dark"]) .theme-logo-dark,
+html[data-theme="dark"] .theme-logo-light {
+  display: none;
+}
+
 .institution-logo-name {
   color: #172033;
   font-size: 0.72rem;
@@ -976,16 +1007,6 @@ footer.sticky-bottom {
   font-size: 0.64rem;
   line-height: 1.2;
   margin-top: 0.22rem;
-}
-
-@keyframes institution-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 @media (max-width: 576px) {
@@ -1001,6 +1022,7 @@ footer.sticky-bottom {
     img.institution-logo-image--wide {
       width: 128px;
     }
+
   }
 }
 
@@ -1011,11 +1033,7 @@ footer.sticky-bottom {
     mask-image: none;
   }
 
-  .institution-marquee-track {
-    animation: none;
-  }
-
-  .institution-logo-set[aria-hidden="true"] {
+  .institution-marquee.is-draggable .institution-logo-set[aria-hidden="true"] {
     display: none;
   }
 }

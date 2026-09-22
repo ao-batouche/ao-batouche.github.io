@@ -12,11 +12,13 @@
   type: time_table
   contents:
     - title: Member of Technical Staff
-      institution: <a href='https://Qutwo.com'>Qutwo</a>, Helsinki, Finland
+      institution: <a href='https://qutwo.com'>QuTwo</a>, Helsinki, Finland
       logos:
         - image: cv/logos/qutwo.png
+          image_dark: cv/logos/qutwo-sand.png
           url: https://qutwo.com/
           class: qutwo
+          label: QuTwo
       year: 2026
 
     - title: Associated Researcher
@@ -79,6 +81,7 @@
       logos:
         - image: cv/logos/i2b.png
           url: https://i2b-dz.com/
+          class: i2b
       year: 2019–2026
 
 - title: Education
@@ -102,6 +105,7 @@
       logos:
         - image: cv/logos/usthb.png
           url: https://www.usthb.dz/
+          class: usthb
       year: 2020
       description:
         - Master's of Data Science
@@ -111,6 +115,7 @@
       logos:
         - image: cv/logos/usthb.png
           url: https://www.usthb.dz/
+          class: usthb
       year: 2018
       description:
         - Bachelor's of Mathematics and Computer Science

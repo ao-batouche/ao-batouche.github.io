@@ -70,13 +70,14 @@ td.institution-logo-cell {
 
 .cv-logo-frame {
   align-items: center;
-  background: var(--global-card-bg-color);
+  background: var(--cv-logo-background, var(--global-card-bg-color));
   border: 1px solid var(--global-divider-color);
   border-radius: 8px;
   box-shadow: 0 8px 18px var(--global-shadow-color);
   color: inherit;
   display: inline-flex;
-  height: 2.15rem;
+  flex-shrink: 0;
+  height: 3.05rem;
   justify-content: center;
   overflow: hidden;
   padding: 0.24rem;
@@ -125,24 +126,35 @@ td.institution-logo-cell {
   }
 
   &--qutwo {
-    background: #0067b1;
-    border-color: rgba(0, 103, 177, 0.28);
-    box-shadow: 0 10px 22px rgba(0, 103, 177, 0.22);
+    --cv-logo-background: #201a1a;
+    padding: 0;
+  }
 
-    &:hover,
-    &:focus-visible {
-      border-color: rgba(0, 103, 177, 0.58);
-      box-shadow: 0 14px 28px rgba(0, 103, 177, 0.28);
-    }
+  &--usthb {
+    --cv-logo-background: #3551b5;
+    border-color: var(--cv-logo-background);
+  }
+
+  &--i2b {
+    --cv-logo-background: #085cab;
+    border-color: var(--cv-logo-background);
 
     img {
-      filter: brightness(0) invert(1);
+      // Preserve the white symbol in the PNG's transparent cutouts.
+      background: #fff;
+      // Hide the source image's transparent gutter along its right edge.
+      clip-path: inset(0 4% 0 0);
+      height: auto;
     }
   }
 }
 
-html[data-theme='dark'] .cv-logo-frame:not(.cv-logo-frame--qutwo) {
-  background: #fff;
+html[data-theme='dark'] .cv-logo-frame {
+  background: var(--cv-logo-background, #fff);
+}
+
+html[data-theme='dark'] .cv-logo-frame--qutwo {
+  --cv-logo-background: #f3eee8;
 }
 
 i.icondepartment {

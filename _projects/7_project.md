@@ -7,5 +7,5 @@ redirect: https://www.algeriatenders.com/accueil
 sitemap: false
 robots: noindex,follow
 importance: 14
-category: Software & Web dev
+category: Software
 ---

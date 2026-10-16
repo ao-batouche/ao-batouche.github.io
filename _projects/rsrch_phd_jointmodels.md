@@ -2,7 +2,8 @@
 layout: page
 title: Joint Models
 description: Assessing the relationship between time to treatment and BCR in PCa patients.
-img: assets/img/projects/rsrch_phd_jointmodel/main.png
+img: assets/img/projects/rsrch_phd_jointmodel/cover-editorial.png
+image_alt: Conceptual illustration of two event timelines linked through a shared latent component.
 importance: 1
 category: Research
 tags:

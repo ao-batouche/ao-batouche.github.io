@@ -1,0 +1,15 @@
+<div class="project-visual project-visual--{{ include.visual }}{% if include.visual == 'ferrygl' or include.visual == 'lemonade' %} project-visual--brand{% endif %}" aria-hidden="true">
+  {% case include.visual %}
+  {% when 'ferrygl' %}
+    <img class="project-brand-logo" src="{{ '/assets/img/projects/ferrygl/logo.png' | relative_url }}" width="1341" height="428" alt="" decoding="async">
+    <span class="project-brand-caption">GitHub → Linear</span>
+  {% when 'lemonade' %}
+    <img class="project-brand-logo theme-logo-light" src="{{ '/assets/img/projects/lemonade/logo-light.png' | relative_url }}" width="2099" height="512" alt="" decoding="async">
+    <img class="project-brand-logo theme-logo-dark" src="{{ '/assets/img/projects/lemonade/logo-dark.png' | relative_url }}" width="2099" height="512" alt="" decoding="async">
+    <span class="project-brand-caption">Local AI server</span>
+  {% when 'semantic-router' %}
+    <span class="project-visual-eyebrow">F-Secure × AMD Silo AI</span>
+    <span class="project-visual-wordmark">Context.<br>Trust.<br>Route.</span>
+    <div class="project-visual-models"><span>Local</span><span>Private</span><span>Cloud</span></div>
+  {% endcase %}
+</div>

@@ -2,7 +2,8 @@
 layout: page
 title: PCC-RAG
 description: A RAG system for a prostate cancer patient assistant, providing grounded responses and more.
-img: assets/img/projects/rsrch_phd_agentic_ai/main.png
+img: assets/img/projects/rsrch_phd_agentic_ai/cover-editorial.png
+image_alt: Conceptual illustration of source documents retrieved into an answer with citations.
 importance: 1
 category: Research
 tags:

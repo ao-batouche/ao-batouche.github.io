@@ -4,7 +4,7 @@ title: My Teeth
 description: Desktop software for dental clinic management.
 img: assets/img/projects/p1/my_teeth.jpg
 importance: 20
-category: Software & Web dev
+category: Software
 giscus_comments: true
 ---
 

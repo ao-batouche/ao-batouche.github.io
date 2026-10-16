@@ -146,6 +146,7 @@ pages.each do |page|
       next
     end
     next if href == '#' && link['role'] == 'button'
+    next if URI(href).host && link['rel'].to_s.split.include?('external')
     target = href.start_with?('#') ? page[:route] : normalize_internal_path.call(href, page[:route])
     next unless target
 

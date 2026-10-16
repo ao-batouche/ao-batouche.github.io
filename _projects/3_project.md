@@ -7,5 +7,5 @@ redirect: https://www.efthoriya.com/
 sitemap: false
 robots: noindex,follow
 importance: 18
-category: Software & Web dev
+category: Software
 ---

@@ -4,7 +4,7 @@ title: LE PROSPECT
 description: A client management web application for FecomIT.
 img: assets/img/projects/p7/min_le_prospect.png
 importance: 17
-category: Software & Web dev
+category: Software
 giscus_comments: true
 ---
 

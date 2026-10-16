@@ -5,7 +5,7 @@ description: An iPhone and iPad app for real-time fleet tracking, trip history, 
 img: assets/img/projects/geoflotte-mobile/icon.jpg
 image_alt: Geoflotte mobile app logo
 importance: 13
-category: Software & Web dev
+category: Software
 ---
 
 **Geoflotte i2b** is a mobile fleet management application published by [i2b SPA](https://i2b-dz.com/). It gives businesses access to information about their vehicles, machinery, and mobile equipment from an iPhone or iPad.
